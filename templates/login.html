@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static', filename="login.css")}}">
+<h1>Login Page</h1>
+<div class="login form">
+	<form action="#" method="post">
+				<!---First Name Form-->
+		<label for="firstname">First Name</label><br>
+		<input type='text' id='firstname' name='firstname' placeholder='First name'><br>
+					<!--Email form--->
+		<label for="email">Email</label><br>
+		<input type="email" id="email" name="email" placeholder="Enter Email"><br>
+		<input type="submit" value="Submit"
+	</form>
+</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static', filename="user.css")}}">
+{% with messages=get_flashed_messages()%}
+	{% if messages %}
+		{%for msg in messages%}
+			<p>{{msg}}</p>
+		{% endfor %}
+	{% endif %}
+{% endwith %}
+<h1>User Page</h1>
+<div class="email-form">
+	<form action="#" method="POST">
+					<!--Email form--->
+		<label for="email">Email</label><br>
+		<input type="email" name="email" placeholder="Enter Email" value="{{email if email}}"><br>
+		<input type="submit" value="Submit">
+	</form>
+</div>
+{% endblock %}
