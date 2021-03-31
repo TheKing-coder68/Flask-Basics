@@ -22,10 +22,6 @@ class users(db.Model):
 def view():
 	return render_template("view.html", values=users.query.all())
 
-@app.route('/')
-def home():
-	return render_template('index.html')
-
 @app.route('/signup', methods=["POST","GET"])
 def signup():
 	# If the user is trying to signup....
@@ -57,6 +53,10 @@ def signup():
 			return redirect("user")
 
 		return render_template('sign-up.html')
+
+@app.route('/')
+def home():
+	return render_template('index.html', )
 
 @app.route('/user', methods=["POST","GET"])
 def user():

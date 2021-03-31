@@ -6,7 +6,12 @@
 		</head>
 
 		<body>
-
+			<div class="w3-bar w3-blue">
+				<a href="{{url_for('signup')}}"><button class="w3-bar-item w3-button">Sign-Up</button></a>
+				<a><button class="w3-bar-item w3-button" href="{{url_for('user')}}">User</button></a>
+				<a><button class="w3-bar-item w3-button" href="{{url_for('logout')}}">Logout</button></a>
+				<a href="{{url_for('home')}}"><button class="w3-bar-item w3-button">Home</button></a>
+			</div>
 			{% block content %}
 
 			{% endblock %}
