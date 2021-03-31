@@ -30,7 +30,7 @@ def home():
 def signup():
 	# If the user is trying to signup....
 	if request.method=="POST":
-		#Uses the seesion on line 6
+		#Uses the session on line 6
 		session.permanent=True
 		#gets the firstname name from the form in sign-up.html
 		user=request.form["firstname"]
