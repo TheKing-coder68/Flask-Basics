@@ -1,23 +1,36 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from datetime import timedelta
+from flask_login.mixins import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import login_manager, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager
 
 app = Flask('app')
 app.config['SECRET_KEY']='Sometimes life just sucks.'
 app.config['SQLALCHEMY_DATABASE_URI']= 'sqlite:///users.sqlite3'
 app.config["SQLALCHEMY_TRACK_NOTIFICATIONS"] = False
-app.permanent_session_lifetime= timedelta(minutes=2)
 
+app.permanent_session_lifetime= timedelta(minutes=2)
 db = SQLAlchemy(app)
 
-class users(db.Model):
+class users(db.Model, UserMixin):
 	_id=db.Column(db.Integer, primary_key=True)
 	name=db.Column(db.String(150))
 	email=db.Column(db.String(150))
+	def get_id(self):
+           return (self._id)
 
-	def __init__(self, name, email):
-		self.name = name
-		self.email = email
+login_manager = LoginManager()
+login_manager.login_view= 'signup'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(id):
+	return users.query.get(int(id))
+
+def __init__(self, name, email):
+	self.name = name
+	self.email = email
 @app.route('/view')
 def view():
 	return render_template("view.html", values=users.query.all())
@@ -42,6 +55,7 @@ def signup():
 			db.session.commit()
 		#Flashes this message after the user has signed up
 		flash("You have successfully signed up")
+		login_user(found_user,remember=True)
 		#Then it redirects them to the /user page
 		return redirect(url_for("user"))
 	else:
@@ -55,12 +69,13 @@ def signup():
 		return render_template('sign-up.html')
 
 @app.route('/')
+@login_required
 def home():
-	return render_template('index.html', )
+	return render_template('index.html', user=current_user)
 
 @app.route('/user', methods=["POST","GET"])
 def user():
-	email=None
+	email = None
 	if "user" in session:
 		user = session["user"]
 		if request.method=="POST":
@@ -80,7 +95,9 @@ def user():
 		return redirect(url_for('signup'))
 
 @app.route('/logout')
+@login_required
 def logout():
+	logout_user()
 	flash("You have successfully logged out!", "info")
 	session.pop("user", None)
 	session.pop("email", None)
